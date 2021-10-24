@@ -22,7 +22,7 @@ class MainListBloc extends Bloc<MainListEvent, MainListState> {
     if (event is FetchArtists) {
       yield ArtistsListLoading();
       try {
-        yield await manageData();
+        yield await manageConnectivityData();
       } catch (e) {
         yield ArtistsListError(e.toString());
       }
@@ -34,12 +34,13 @@ class MainListBloc extends Bloc<MainListEvent, MainListState> {
           if (currentState.offline && event.result != ConnectivityResult.none) {
             //Online state
             yield ArtistsListLoaded(
-                (await _artistsRepository.getRappers()).artists, true,
+                await manageData(false), !currentState.status,
                 offline: false);
           } else if (!currentState.offline &&
               event.result == ConnectivityResult.none) {
             //Offline state
-            yield ArtistsListLoaded(await _storage.artistList(''), true,
+            yield ArtistsListLoaded(
+                await manageData(true), !currentState.status,
                 offline: true);
           }
         } catch (e) {
@@ -49,24 +50,37 @@ class MainListBloc extends Bloc<MainListEvent, MainListState> {
     }
   }
 
-  Future<ArtistsListLoaded> manageData() async {
+  Future<ArtistsListLoaded> manageConnectivityData() async {
     if (await checkConnectivity()) {
       //Online state
-      return ArtistsListLoaded(
-          (await _artistsRepository.getRappers()).artists, true,
-          offline: false);
+      List<Artist> artists = await manageData(false);
+
+      return ArtistsListLoaded(artists, true, offline: false);
     } else {
       //Offline state
-      return ArtistsListLoaded(await _storage.artistList(''), true,
-          offline: true);
+      return ArtistsListLoaded(await manageData(true), true, offline: true);
     }
   }
 
-  sortByName(List<Artist> artistList) {
-    artistList.sort((a, b) {
-      return a.name.toLowerCase().compareTo(b.name.toLowerCase());
-    });
+  Future<List<Artist>> manageData(bool offline) async {
+    if (offline) {
+      //Offline state
+      List<Artist> artists = await _storage.artistList('');
+      return artists
+        ..sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+    } else {
+      //Online state
+      List<Artist> artists = (await _artistsRepository.getRappers()).artists;
+      await _storage.addListOfArtist(artists);
+      return artists
+        ..sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+    }
   }
+
 
   Future<bool> checkConnectivity() async {
     var connectivityResult = await (Connectivity().checkConnectivity());

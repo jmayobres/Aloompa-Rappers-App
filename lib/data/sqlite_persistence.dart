@@ -37,7 +37,7 @@ class SqlitePersistence {
 
   Future<List<Map<String, dynamic>>> findObjects(String query) async {
     final ret = await db.rawQuery(
-        'SELECT *, COUNT(*) as watchedTimes FROM $ArtistsTableName where name like ? group by imdbId',
+        'SELECT * FROM $ArtistsTableName ',
         ['%$query%']);
 
     return ret;

@@ -48,9 +48,6 @@ class _DriverDialogWidgetState extends State<DriverDialogWidget> {
   Widget build(BuildContext context) {
     _theme = Theme.of(context);
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Rappers'),
-      // ),
       body: SafeArea(
         child: BlocListener(
             bloc: _mainListBloc,
@@ -129,6 +126,7 @@ class _DriverDialogWidgetState extends State<DriverDialogWidget> {
           child: ListTile(
             leading: Icon(Icons.search),
             title: TextField(
+                enabled: artists.isNotEmpty,
                 controller: textController,
                 decoration: InputDecoration(
                     hintText: 'Search', border: InputBorder.none),
@@ -145,20 +143,24 @@ class _DriverDialogWidgetState extends State<DriverDialogWidget> {
           ),
         ),
         Expanded(
-          child: _searchResult.isNotEmpty || textController.text.isNotEmpty
-              ? ListView.builder(
-                  itemCount: _searchResult.length,
-                  itemBuilder: (context, index) {
-                    return ArtistsCard(artist: _searchResult[index]);
-                  },
-                )
-              : ListView.builder(
-                  itemCount: artists.length,
-                  itemBuilder: (context, index) {
-                    return ArtistsCard(artist: artists[index]);
-                  },
-                ),
-        ),
+            child: Visibility(
+          visible: artists.isEmpty,
+          child: EmptyView(),
+          replacement:
+              _searchResult.isNotEmpty || textController.text.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: _searchResult.length,
+                      itemBuilder: (context, index) {
+                        return ArtistsCard(artist: _searchResult[index]);
+                      },
+                    )
+                  : ListView.builder(
+                      itemCount: artists.length,
+                      itemBuilder: (context, index) {
+                        return ArtistsCard(artist: artists[index]);
+                      },
+                    ),
+        ))
       ],
     );
   }

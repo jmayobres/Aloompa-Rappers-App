@@ -15,7 +15,7 @@ class ArtistsListError extends MainListState {
   @override
   List<Object> get props => [error];
   @override
-  String toString() => 'ArtistsDialogError';
+  String toString() => 'ArtistsListError';
 }
 
 class ArtistsListLoaded extends MainListState {

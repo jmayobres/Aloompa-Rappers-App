@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
   final AloompaStorage storage;
   const MyApp({Key key, this.storage}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

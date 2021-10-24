@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './styling.dart';
 
 ThemeData principalLightTheme(BuildContext context) {
@@ -35,8 +36,10 @@ ThemeData principalLightTheme(BuildContext context) {
         foregroundColor: Colors.black, backgroundColor: Colors.yellow.shade600),
     tabBarTheme: TabBarTheme(labelColor: Colors.black),
     appBarTheme: AppBarTheme(
-        brightness: Brightness.light,
-        textTheme: Styling.textTheme,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+        ),
+        // toolbarTextStyle: Styling.textTheme,
         color: Colors.green,
         elevation: 3,
         iconTheme: IconTheme.of(context).copyWith(color: Colors.black),

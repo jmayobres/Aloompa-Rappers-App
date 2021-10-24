@@ -65,13 +65,6 @@ class Artist {
         image: json["image"] == null ? null : json["image"],
       );
 
-  // factory Artist.fromDB(Map<String, dynamic> json) => Artist(
-  //     id: json["idArtists"] == null ? null : json["idArtists"],
-  //     name: json["name"] == null ? null : json["name"],
-  //     description: json["description"] == null ? null : json["description"],
-  //     image: json["image"] == null ? null : json["image"],
-  // );
-
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
         "name": name == null ? null : name,

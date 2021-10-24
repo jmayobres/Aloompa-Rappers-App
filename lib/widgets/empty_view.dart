@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class EmptyView extends StatefulWidget {
-  final VoidCallback onReloadTap;
   final String title;
   final Color background;
-  const EmptyView({Key key, this.onReloadTap, this.title, this.background})
-      : super(key: key);
+  const EmptyView({Key key, this.title, this.background}) : super(key: key);
 
   @override
   _EmptyViewState createState() => _EmptyViewState();
@@ -45,13 +43,6 @@ class _EmptyViewState extends State<EmptyView> with TickerProviderStateMixin {
             SizedBox(
               height: 30,
             ),
-            Visibility(
-                visible: widget.onReloadTap != null,
-                child: ElevatedButton(
-                  child: Text('Refresh'),
-                  style: ButtonStyle(),
-                  onPressed: () => widget.onReloadTap(),
-                )),
           ],
         ),
       ),
